@@ -1,77 +1,101 @@
 
-// SEARCH BOARDING HOUSES
-function searchRooms() {
+/* =========================================================
+   MOBILE NAVIGATION
+========================================================= */
 
-    const searchInput = document
-        .getElementById("searchInput")
-        .value.toLowerCase()
-        .trim();
+const menuToggle = document.querySelector(".menu-toggle");
+const navLinks = document.querySelector(".nav-links");
 
-    const roomCards = document.querySelectorAll(".room-card");
+if (menuToggle && navLinks) {
 
-    const noResults = document.getElementById("noResults");
+    menuToggle.addEventListener("click", () => {
 
-    let found = 0;
+        const isOpen = navLinks.classList.toggle("open");
 
-    roomCards.forEach(function(card) {
+        menuToggle.setAttribute(
+            "aria-expanded",
+            isOpen
+        );
 
-        const roomName = card
-            .getAttribute("data-search")
-            .toLowerCase();
+        menuToggle.setAttribute(
+            "aria-label",
+            isOpen
+                ? "Close navigation menu"
+                : "Open navigation menu"
+        );
 
-        if (roomName.includes(searchInput)) {
+        menuToggle.textContent = isOpen ? "✕" : "☰";
 
-            card.style.display = "block";
-            found++;
+    });
 
-        } else {
+    /* Close menu when a navigation link is clicked */
 
-            card.style.display = "none";
+    navLinks.querySelectorAll("a").forEach((link) => {
+
+        link.addEventListener("click", () => {
+
+            navLinks.classList.remove("open");
+
+            menuToggle.setAttribute(
+                "aria-expanded",
+                "false"
+            );
+
+            menuToggle.setAttribute(
+                "aria-label",
+                "Open navigation menu"
+            );
+
+            menuToggle.textContent = "☰";
+
+        });
+
+    });
+
+    /* Close menu when clicking outside */
+
+    document.addEventListener("click", (event) => {
+
+        const clickedInsideMenu =
+            navLinks.contains(event.target);
+
+        const clickedMenuButton =
+            menuToggle.contains(event.target);
+
+        if (
+            !clickedInsideMenu &&
+            !clickedMenuButton &&
+            navLinks.classList.contains("open")
+        ) {
+
+            navLinks.classList.remove("open");
+
+            menuToggle.setAttribute(
+                "aria-expanded",
+                "false"
+            );
+
+            menuToggle.setAttribute(
+                "aria-label",
+                "Open navigation menu"
+            );
+
+            menuToggle.textContent = "☰";
 
         }
 
     });
 
-    if (found === 0) {
-        noResults.style.display = "block";
-    } else {
-        noResults.style.display = "none";
-    }
 }
 
-// SEARCH WHEN PRESSING ENTER
-document.getElementById("searchInput")
-    .addEventListener("keypress", function(event) {
+/* =========================================================
+   AUTOMATIC COPYRIGHT YEAR
+========================================================= */
 
-        if (event.key === "Enter") {
-            searchRooms();
-        }
+const yearElement = document.getElementById("year");
 
-    });
+if (yearElement) {
 
-// VIEW ROOM DETAILS
-function showDetails(roomName) {
-
-    if (roomName === "Room 1") {
-
-        alert(
-            "Room 1\n\n" +
-            "Type: Single Room\n" +
-            "Price: ₱2,000/month\n" +
-            "Location: Near School\n\n" +
-            "Contact us for more information."
-        );
-
-    } else if (roomName === "Room 2") {
-
-        alert(
-            "Room 2\n\n" +
-            "Type: Shared Room\n" +
-            "Price: ₱2,500/month\n" +
-            "Location: Town Proper\n\n" +
-            "Contact us for more information."
-        );
-
-    }
+    yearElement.textContent = new Date().getFullYear();
 
 }
